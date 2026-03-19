@@ -1,11 +1,13 @@
 package com.example.calculator;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     String operator = "";
     String expression = "0";
 
+    String recentOp = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
 
         TextView label = findViewById(R.id.input);
         TextView recent = findViewById(R.id.historyLabel);
@@ -57,7 +61,16 @@ public class MainActivity extends AppCompatActivity {
         Button delBtn = findViewById(R.id.delBtn);
         Button clearBtn = findViewById(R.id.clearBtn);
 
-        label.setText("0");
+
+        if (savedInstanceState != null) {
+            expression = savedInstanceState.getString("EXPRESSION", "0");
+            operator = savedInstanceState.getString("OPERATOR", "");
+            firstNumber = savedInstanceState.getDouble("FIRST_NUMBER", 0);
+            secondNumber = savedInstanceState.getDouble("SECOND_NUMBER", 0);
+            recentOp = savedInstanceState.getString("RECENT", "");
+        }
+        recent.setText(recentOp);
+        label.setText(expression);
 
         View.OnClickListener numberClick = v -> {
             Button btn = (Button) v;
@@ -157,19 +170,39 @@ public class MainActivity extends AppCompatActivity {
                 case "÷":
                     if(secondNumber == 0) {
                         label.setText("Cannot divide by 0");
-                        recent.setText(formatResult(firstNumber) + " " + operator + " " + formatResult(secondNumber));
+                        recent.setText(String.valueOf(formatResult(firstNumber) + " " + operator + " " + formatResult(secondNumber)));
                         return;
                     }
                     result = firstNumber / secondNumber;
                     break;
             }
 
-            recent.setText(formatResult(firstNumber) + " " + operator + " " + formatResult(secondNumber));
+            recent.setText(String.valueOf(formatResult(firstNumber) + " " + operator + " " + formatResult(secondNumber)));
             String formatted = formatResult(result);
             label.setText(formatted);
-
+            recentOp = String.valueOf(formatResult(firstNumber) + " " + operator + " " + formatResult(secondNumber));
             expression = formatted;
             operator = "";
+        });
+
+        idBtn.setOnClickListener(v -> {
+            if(expression.contains(" ")) {
+                String[] parts = expression.split(" ");
+                if(parts.length < 3 || parts[2].isEmpty() || parts[2].equals("-")) {
+                    expression += "0";
+                    parts = expression.split(" ");
+                }
+                double num = Double.parseDouble(parts[2]);
+                num *= 2.08;
+                parts[2] = formatResult(num);
+                expression = parts[0] + " " + parts[1] + " " + parts[2];
+            } else {
+                double num = Double.parseDouble(expression);
+                recent.setText(num + " x 2.08");
+                num *= 2.08;
+                expression = formatResult(num);
+            }
+            label.setText(expression);
         });
 
         clearBtn.setOnClickListener(v -> {
@@ -194,5 +227,15 @@ public class MainActivity extends AppCompatActivity {
     private String formatResult(double result) {
         if(result == (long) result) return String.valueOf((long) result);
         else return String.valueOf(result);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("EXPRESSION", expression);
+        outState.putString("OPERATOR", operator);
+        outState.putDouble("FIRST_NUMBER", firstNumber);
+        outState.putDouble("SECOND_NUMBER", secondNumber);
+        outState.putString("RECENT", recentOp);
     }
 }
