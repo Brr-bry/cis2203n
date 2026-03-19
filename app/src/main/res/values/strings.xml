@@ -5,7 +5,7 @@
     <string name="Clear">C</string>
     <string name="Delete">Del</string>
     <string name="number0">0</string>
-    <string name="Percent">%</string>
+    <string name="sign">+/-</string>
     <string name="Equal">=</string>
     <string name="number3">3</string>
     <string name="number4">4</string>
@@ -17,7 +17,7 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="multiply">x</string>
-    <string name="divide">/</string>
+    <string name="divide">÷</string>
     <string name="period">.</string>
     <string name="ID">x2.08</string>
 </resources>

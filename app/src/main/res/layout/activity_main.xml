@@ -40,18 +40,22 @@
         <TextView
             android:id="@+id/input"
             android:layout_width="match_parent"
-            android:layout_height="96dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="0dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:gravity="bottom"
+
+            android:ellipsize="none"
+            android:gravity="bottom|end"
+
+            android:maxLines="1"
+            android:scrollbars="none"
+            android:scrollHorizontally="true"
             android:text="@string/number0"
-            android:textAlignment="textEnd"
+
             android:textColor="@color/white"
-            android:textSize="60sp" />
+            android:textSize="60sp"
+            app:autoSizeTextType="none" />
 
         <androidx.gridlayout.widget.GridLayout
             android:id="@+id/gridLayout"
@@ -94,13 +98,13 @@
                 app:layout_rowWeight="1" />
 
             <Button
-                android:id="@+id/percentBtn"
+                android:id="@+id/signBtn"
                 android:layout_width="80dp"
                 android:layout_height="6dp"
                 android:layout_margin="5dp"
                 android:backgroundTint="#9e72c3"
                 android:gravity="fill"
-                android:text="@string/Percent"
+                android:text="@string/sign"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 app:cornerRadius="1000dp"
@@ -144,7 +148,7 @@
                 android:layout_height="80dp"
                 android:layout_margin="5dp"
                 android:backgroundTint="#7338a0"
-                android:gravity="fill"
+                android:gravity="center"
                 android:text="@string/number8"
                 android:textAlignment="center"
                 android:textSize="30sp"
